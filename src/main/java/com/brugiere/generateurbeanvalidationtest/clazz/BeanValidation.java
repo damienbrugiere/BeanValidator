@@ -5,6 +5,8 @@
  */
 package com.brugiere.generateurbeanvalidationtest.clazz;
 
+import java.util.Objects;
+
 /**
  *
  * @author damien
@@ -27,6 +29,28 @@ public abstract class BeanValidation {
     public abstract String ecrirLeChamp();
     
     public abstract String ecrirLesTests(Attribut attribut,Clazz clazz);
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.messageError);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BeanValidation other = (BeanValidation) obj;
+        if (!Objects.equals(this.messageError, other.messageError)) {
+            return false;
+        }
+        return true;
+    }
     
     
 }

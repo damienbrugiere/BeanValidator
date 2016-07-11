@@ -6,6 +6,7 @@
 package com.brugiere.generateurbeanvalidationtest.clazz;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -63,5 +64,36 @@ public class Attribut {
         }
         return tests;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.name);
+        hash = 67 * hash + Objects.hashCode(this.type);
+        hash = 67 * hash + Objects.hashCode(this.beanValidations);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Attribut other = (Attribut) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.beanValidations, other.beanValidations)) {
+            return false;
+        }
+        return true;
+    }
+    
 
 }

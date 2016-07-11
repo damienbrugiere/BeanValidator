@@ -9,7 +9,6 @@ import com.brugiere.generateurbeanvalidationtest.clazz.Attribut;
 import com.brugiere.generateurbeanvalidationtest.clazz.BeanValidation;
 import com.brugiere.generateurbeanvalidationtest.clazz.Clazz;
 
-import static java.lang.Math.random;
 import java.util.Date;
 import java.util.Random;
 
@@ -19,26 +18,27 @@ import java.util.Random;
  */
 public class Size extends BeanValidation {
 
+    private static Random random = new Random((new Date()).getTime());
+    private Integer min;
+    private Integer max;
     
-  private static Random random = new Random((new Date()).getTime());
-    private Integer value;
-
-    public Size(Integer value, String messageError) {
+    public Size(Integer min,Integer max, String messageError) {
         super("{always." + messageError + ".size.exceded}");
-        this.value = value;
+        this.min = min;
+        this.max = max;
     }
 
     public Integer getValue() {
-        return value;
+        return min;
     }
 
     public void setValue(Integer value) {
-        this.value = value;
+        this.min = value;
     }
 
     @Override
     public String ecrirLeChamp() {
-        return "@Size(message=\"" + this.getMessageError() + "\", value =" + this.value + ")\n";
+        return "@Size(message=\"" + this.getMessageError() + "\", min =" + this.min + ",max= "+this.max+")\n";
     }
 
     private String generateurDeString(int taille) {
@@ -58,14 +58,22 @@ public class Size extends BeanValidation {
 
     @Override
     public String ecrirLesTests(Attribut attribut, Clazz clazz) {
-         String setterString = Character.toUpperCase(attribut.getName().charAt(0))+attribut.getName().substring(1);
+        String setterString = Character.toUpperCase(attribut.getName().charAt(0)) + attribut.getName().substring(1);
         return "@Test\n"
-                + "public void shouldNotValidateA" + attribut.getName() + "LessThan" + (this.value) + "(){\n"
+                + "public void shouldNotValidateA" + attribut.getName() + "LessThan" + (this.min) + "(){\n"
                 + clazz.getName() + " " + clazz.getName() + "= fullBean();\n"
-                + clazz.getName() + ".set" + setterString + "(" + this.value + ");\n"
-                + "Set<ConstrainteViolations<" + clazz.getName() + ">>> violations = validator.validate(" + generateurDeString(this.value) + ");\n"
+                + clazz.getName() + ".set" + setterString + "(" + this.min + ");\n"
+                + "Set<ConstrainteViolations<" + clazz.getName() + ">>> violations = validator.validate(" + generateurDeString(this.min) + ");\n"
+                + "assertThat(violations).extracting(\"message\").constainsExactly(" + this.getMessageError() + ");\n"
+                + "}\n"
+                + "@Test\n"
+                + "public void shouldNotValidateA" + attribut.getName() + "GreaterThan" + (this.max) + "(){\n"
+                + clazz.getName() + " " + clazz.getName() + "= fullBean();\n"
+                + clazz.getName() + ".set" + setterString + "(" + this.max + ");\n"
+                + "Set<ConstrainteViolations<" + clazz.getName() + ">>> violations = validator.validate(" + generateurDeString(this.max) + ");\n"
                 + "assertThat(violations).extracting(\"message\").constainsExactly(" + this.getMessageError() + ");\n"
                 + "}\n";
+                
     }
 
 }

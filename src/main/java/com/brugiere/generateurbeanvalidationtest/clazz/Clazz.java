@@ -6,6 +6,7 @@
 package com.brugiere.generateurbeanvalidationtest.clazz;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -48,4 +49,32 @@ public class Clazz {
         clazz +="\n}";
         return clazz;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.name);
+        hash = 13 * hash + Objects.hashCode(this.attributs);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Clazz other = (Clazz) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.attributs, other.attributs)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
